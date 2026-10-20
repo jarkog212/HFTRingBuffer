@@ -13,7 +13,7 @@ class SPSCRingQueue
 {
 public:
     
-    SPSCRingQueue() { _buffer.resize(size); };
+    SPSCRingQueue() : _buffer(size) {};
     ~SPSCRingQueue() = default;
     SPSCRingQueue(const SPSCRingQueue&) = delete;
     SPSCRingQueue& operator=(const SPSCRingQueue&) = delete;
@@ -32,7 +32,7 @@ public:
 
         _writeIndex.store(writeIndex + 1, std::memory_order_release);
         return true;
-    };
+    }
 
     bool Dequeue(T& out)
     {
@@ -47,9 +47,9 @@ public:
         _readIndex.store(readIndex + 1, std::memory_order_release);
 
         return true;
-    };
+    }
 
-    bool IsEmpty()
+    bool IsEmpty() const
     {
         const size_t writeIndex = _writeIndex.load(std::memory_order_acquire);
         const size_t readIndex = _readIndex.load(std::memory_order_acquire);
